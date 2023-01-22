@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { supabase } from "./supabaseClient";
+import Avatar from "./Avatar";
 
 const Account = ({ session }) => {
   const [loading, setLoading] = useState(true);
@@ -32,7 +33,7 @@ const Account = ({ session }) => {
         setAvatarUrl(data.avatar_url);
       }
     } catch (error) {
-      alert(error.message);
+      console.log("get profile", error);
     } finally {
       setLoading(false);
     }
@@ -59,7 +60,7 @@ const Account = ({ session }) => {
         throw error;
       }
     } catch (error) {
-      alert(error.message);
+      console.log("update profile", error);
     } finally {
       setLoading(false);
     }
@@ -71,6 +72,14 @@ const Account = ({ session }) => {
         "Saving ..."
       ) : (
         <form onSubmit={updateProfile} className="form-widget">
+          <Avatar
+            url={avatar_url}
+            size={150}
+            onUpload={(url) => {
+              setAvatarUrl(url);
+              updateProfile({ username, website, avatar_url: url });
+            }}
+          />
           <div>Email: {session.user.email}</div>
           <div>
             <label htmlFor="username">Name</label>

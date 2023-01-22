@@ -1,42 +1,3 @@
-/* .App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-} */
-
 html,
 body {
   --custom-font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen, Ubuntu,
@@ -419,3 +380,79 @@ button.primary,
   white-space: nowrap;
   width: 1px;
 }
+
+/* Modal  */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal {
+  background-color: #333;
+  color: white;
+  padding: 1rem;
+  width:25%;
+  height:50%;
+  border-radius: 0.5rem;
+  animation: modal-animate 0.3s;
+}
+
+/* for mobile */
+@media only screen and (max-width: 480px) {
+  .modal {
+    width:75%;
+    height:50%;
+  }
+}
+
+.center-form-items {
+  display: flex;
+  justify-content: center;
+}
+
+.modal h1 {
+  margin-top: 0;
+  margin: auto;
+}
+
+.modal label {
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.modal input {
+  display: block;
+  width: 100%;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  border: 1px solid gray;
+  border-radius: 0.5rem;
+  background-color: #444;
+  color: white;
+}
+
+.modal button {
+  background-color: #555;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+}
+
+@keyframes modal-animate {
+  from {
+    transform: scale(0.5);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+

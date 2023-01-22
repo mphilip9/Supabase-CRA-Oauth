@@ -8,6 +8,13 @@ import Account from "./Account";
 export default function App() {
   const [session, setSession] = useState(null);
 
+  const checkPrivileges = (id) => {
+    axios
+      .get("/privileges", { params: { id: id } })
+      .then((response) => console.log(response.data))
+      .catch((error) => console.log(error));
+  };
+
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
@@ -16,6 +23,8 @@ export default function App() {
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
+
+    // DBcheck();
 
     axios
       .get("/ping")
@@ -26,7 +35,7 @@ export default function App() {
   return (
     <div className="container" style={{ padding: "50px 0 100px 0" }}>
       {!session ? (
-        <Auth />
+        <Auth checkPrivileges={checkPrivileges} />
       ) : (
         <Account key={session.user.id} session={session} />
       )}
