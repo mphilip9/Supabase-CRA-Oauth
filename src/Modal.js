@@ -66,11 +66,11 @@ export const Modal = ({ setShowModal, handleSignup }) => {
     // Before closing the modal, need to ensure the signup was successful
     if (formData.password === checkPassword) {
       // Here is where the signup info is sent to the DB
-      const {
-        data,
-        error,
-        options: { captchaToken },
-      } = await supabase.auth.signUp(formData);
+      const { data, error } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+        option: { captchaToken },
+      });
       if (error) {
         // read the error message, it will tell you if account exists or not
         console.log(error);
@@ -101,64 +101,76 @@ export const Modal = ({ setShowModal, handleSignup }) => {
   return ReactDom.createPortal(
     <div className="modal-overlay" ref={modalRef} onClick={closeModal}>
       <div className="modal">
-        <div className="center-form-items">
-          <h1>Signup</h1>
-        </div>
-        <form onSubmit={handleSubmit}>
-          {usernameTaken ? (
-            <p style={{ color: "red" }}>
-              Account already exists, please exit and login
-            </p>
-          ) : null}
-          <label>
-            Email:
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-            />
-          </label>
-          <br />
-          {validatePassword ? null : (
-            <p style={{ color: "red" }}>
-              Minimum password length 8, must contain at least 1 number/1
-              special character/1 uppercase
-            </p>
-          )}
-          <label>
-            Password:
-            <input
-              type="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-            />
-          </label>
-          <br />
-          <label>
-            Retype password:
-            <input
-              type="password"
-              name="checkPassword"
-              value={checkPassword}
-              onChange={handleChange}
-            />
-          </label>
-          {matchPassword ? null : (
-            <p style={{ color: "red" }}>Passwords do not match</p>
-          )}
-          <HCaptcha
-            ref={captcha}
-            sitekey="819968fe-ac7f-4fc0-a128-67a71e43b7d8"
-            onVerify={(token) => {
-              setCaptchaToken(token);
-            }}
-          />
+        <div className="modal-info">info goes here</div>
+        <div className="form-container">
           <div className="center-form-items">
-            <button type="submit">Submit</button>
+            <h1>Signup</h1>
           </div>
-        </form>
+          <form onSubmit={handleSubmit}>
+            {usernameTaken ? (
+              <p style={{ color: "red" }}>Account already exists</p>
+            ) : null}
+            <label>
+              Email:
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+              />
+            </label>
+            <br />
+            {validatePassword ? (
+              <p style={{ fontSize: ".9em" }}>
+                Minimum password length 8, must contain at least 1 number/1
+                special character/1 uppercase
+              </p>
+            ) : (
+              <p style={{ color: "red", fontSize: ".9em" }}>
+                Minimum password length 8, must contain at least 1 number/1
+                special character/1 uppercase
+              </p>
+            )}
+            <label>
+              Password:
+              <input
+                type="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+              />
+            </label>
+            <br />
+            {matchPassword ? null : (
+              <p style={{ color: "red", fontSize: ".9em" }}>
+                Passwords do not match
+              </p>
+            )}
+            <label>
+              Retype password:
+              <input
+                type="password"
+                name="checkPassword"
+                value={checkPassword}
+                onChange={handleChange}
+              />
+            </label>
+            <div className="center-form-items">
+              <HCaptcha
+                ref={captcha}
+                theme={"dark"}
+                size={"compact"}
+                sitekey="819968fe-ac7f-4fc0-a128-67a71e43b7d8"
+                onVerify={(token) => {
+                  setCaptchaToken(token);
+                }}
+              />
+            </div>
+            <div className="center-form-items">
+              <button type="submit">Submit</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>,
     document.getElementById("portal")

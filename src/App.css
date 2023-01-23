@@ -361,7 +361,7 @@ button.primary,
   transition: all 0.2s ease;
 }
 
-.form-widget .button:hover {
+button:hover {
   background-color: #2a2a2a;
 }
 
@@ -394,23 +394,33 @@ button.primary,
   justify-content: center;
 }
 
+
 .modal {
   background-color: #333;
   color: white;
   padding: 1rem;
-  width:25%;
-  height:50%;
+  width:35em;
+  height:40em;
   border-radius: 0.5rem;
   animation: modal-animate 0.3s;
 }
 
+.form-container {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+
 /* for mobile */
-@media only screen and (max-width: 480px) {
+@media screen and (max-width: 700px) {
   .modal {
-    width:75%;
-    height:50%;
+    width:85%;
+    height:80%;
   }
 }
+/* for medium screens */
+
 
 .center-form-items {
   display: flex;
@@ -419,7 +429,6 @@ button.primary,
 
 .modal h1 {
   margin-top: 0;
-  margin: auto;
 }
 
 .modal label {
@@ -429,14 +438,16 @@ button.primary,
 
 .modal input {
   display: block;
-  width: 100%;
+  width:100%;
   padding: 0.5rem;
   margin-bottom: 1rem;
   border: 1px solid gray;
   border-radius: 0.5rem;
   background-color: #444;
   color: white;
+  margin: auto;
 }
+
 
 .modal button {
   background-color: #555;

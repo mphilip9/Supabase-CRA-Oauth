@@ -7,6 +7,7 @@ export default function Auth({ checkPrivileges }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [signupSuccess, setSignupSuccess] = useState(false);
+  const [loginError, setLoginError] = useState(false);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -37,9 +38,10 @@ export default function Auth({ checkPrivileges }) {
     });
     if (error) {
       console.log(error);
+      setLoginError(true);
     } else if (data) {
       DBcheck();
-      checkPrivileges(data.user.id);
+      // checkPrivileges(data.user.id);
     }
   };
 
@@ -71,9 +73,14 @@ export default function Auth({ checkPrivileges }) {
   return (
     <div className="row flex-center flex">
       <div className="col-6 form-widget" aria-live="polite">
-        <h1 className="header">Supabase + React</h1>
+        <h1 className="header">Straw Aficionado</h1>
         {signupSuccess ? (
           <div>Signup successful. Please confirm your email to login.</div>
+        ) : null}
+        {loginError ? (
+          <div style={{ color: "red" }}>
+            There was a problem with your login.
+          </div>
         ) : null}
         <form onSubmit={handleEmailLogin}>
           <label htmlFor="email">Email</label>
