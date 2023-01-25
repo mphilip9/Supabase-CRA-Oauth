@@ -5,24 +5,29 @@ import ReactDom from "react-dom";
 import { supabase } from "./supabaseClient";
 import HCaptcha from "@hcaptcha/react-hcaptcha";
 
-import validatePwd from "./helperfuncs.js";
+import { validatePwd, validateSubmitPwd } from "./helperfuncs.js";
 
 export const Modal = ({ setShowModal, handleSignup }) => {
   const [usernameTaken, setUsernameTaken] = useState(false);
   const [checkPassword, setCheckPassword] = useState("");
   const [matchPassword, setMatchPassword] = useState(true);
-  const [validatePassword, setValidatePassword] = useState(true);
+  const [validatePassword, setValidatePassword] = useState({
+    length: ["red", "⚠"],
+    number: ["red", "⚠"],
+    special: ["red", "⚠"],
+    capital: ["red", "⚠"],
+  });
 
-  const [captchaToken, setCaptchaToken] = useState();
-  const captcha = useRef();
+  // const [captchaToken, setCaptchaToken] = useState();
+  // const captcha = useRef();
 
   // close the modal when clicking outside the modal.
-  const modalRef = useRef();
-  const closeModal = (e) => {
-    if (e.target === modalRef.current) {
-      setShowModal(false);
-    }
-  };
+  // const modalRef = useRef();
+  // const closeModal = (e) => {
+  //   if (e.target === modalRef.current) {
+  //     setShowModal(false);
+  //   }
+  // };
 
   const [formData, setFormData] = useState({
     email: "",
@@ -33,13 +38,8 @@ export const Modal = ({ setShowModal, handleSignup }) => {
     const { name, value } = event.target;
 
     // validate password for min requirements
-    if (
-      (name === "checkPassword" || name === "password") &&
-      validatePwd(value)
-    ) {
-      setValidatePassword(true);
-    } else if (name === "checkPassword" || name === "password") {
-      setValidatePassword(false);
+    if (name === "password") {
+      setValidatePassword(validatePwd(value));
     }
 
     // check if passwords are the same
@@ -64,51 +64,48 @@ export const Modal = ({ setShowModal, handleSignup }) => {
     event.preventDefault();
     console.log(formData);
     // Before closing the modal, need to ensure the signup was successful
-    if (formData.password === checkPassword) {
+    if (
+      formData.password === checkPassword &&
+      validateSubmitPwd(formData.password)
+    ) {
       // Here is where the signup info is sent to the DB
       const { data, error } = await supabase.auth.signUp({
         email: formData.email,
         password: formData.password,
-        option: { captchaToken },
+        // option: { captchaToken },
       });
       if (error) {
         // read the error message, it will tell you if account exists or not
-        console.log(error);
-        setUsernameTaken(true);
+        console.log("error signing up", error);
         // if data session is null, signup was successful
       } else if (data.session === null) {
-        handleSignup();
-        setShowModal(false);
-        setCheckPassword("");
-        setMatchPassword(true);
-        setFormData({
-          email: "",
-          password: "",
-        });
+        // check if user is already signed up
+        if (data.user.identities.length > 0) {
+          console.log("new user created", data);
+          handleSignup();
+          setShowModal(false);
+        } else {
+          setUsernameTaken(true);
+        }
       } else {
-        setCheckPassword("");
-        setMatchPassword(true);
-        setFormData({
-          email: "",
-          password: "",
-        });
         setShowModal(false);
       }
     }
-    captcha.current.resetCaptcha();
+    // captcha.current.resetCaptcha();
   };
   //render the modal JSX in the portal div.
   return ReactDom.createPortal(
-    <div className="modal-overlay" ref={modalRef} onClick={closeModal}>
+    <div className="modal-overlay">
       <div className="modal">
-        <div className="modal-info">info goes here</div>
         <div className="form-container">
           <div className="center-form-items">
             <h1>Signup</h1>
           </div>
-          <form onSubmit={handleSubmit}>
+          <form style={{ width: "100%" }} onSubmit={handleSubmit}>
             {usernameTaken ? (
-              <p style={{ color: "red" }}>Account already exists</p>
+              <p style={{ color: "red" }}>
+                Already signed up, sign in instead?
+              </p>
             ) : null}
             <label>
               Email:
@@ -120,17 +117,24 @@ export const Modal = ({ setShowModal, handleSignup }) => {
               />
             </label>
             <br />
-            {validatePassword ? (
-              <p style={{ fontSize: ".9em" }}>
-                Minimum password length 8, must contain at least 1 number/1
-                special character/1 uppercase
-              </p>
-            ) : (
-              <p style={{ color: "red", fontSize: ".9em" }}>
-                Minimum password length 8, must contain at least 1 number/1
-                special character/1 uppercase
-              </p>
-            )}
+            <figure>
+              <figcaption>Password Requirements:</figcaption>
+              <ul>
+                <li style={{ color: validatePassword.length[0] }}>
+                  {validatePassword.length[1]} length 8
+                </li>
+                <li style={{ color: validatePassword.number[0] }}>
+                  {" "}
+                  {validatePassword.number[1]} 1 number
+                </li>
+                <li style={{ color: validatePassword.special[0] }}>
+                  {validatePassword.special[1]} 1 special character
+                </li>
+                <li style={{ color: validatePassword.capital[0] }}>
+                  {validatePassword.capital[1]} 1 Capital letter
+                </li>
+              </ul>
+            </figure>
             <label>
               Password:
               <input
@@ -155,7 +159,7 @@ export const Modal = ({ setShowModal, handleSignup }) => {
                 onChange={handleChange}
               />
             </label>
-            <div className="center-form-items">
+            {/* <div className="center-form-items">
               <HCaptcha
                 ref={captcha}
                 theme={"dark"}
@@ -165,11 +169,23 @@ export const Modal = ({ setShowModal, handleSignup }) => {
                   setCaptchaToken(token);
                 }}
               />
-            </div>
+            </div> */}
             <div className="center-form-items">
               <button type="submit">Submit</button>
             </div>
           </form>
+          <div className="center-form-items">
+            <button
+              onClick={() => {
+                setShowModal(false);
+              }}
+              name="close-signup-modal"
+              type="button"
+              className="close-button"
+            >
+              X
+            </button>
+          </div>
         </div>
       </div>
     </div>,

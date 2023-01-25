@@ -54,7 +54,15 @@ export default function Avatar({ url, size, onUpload }) {
   };
 
   return (
-    <div style={{ width: size }} aria-live="polite">
+    <div
+      style={{
+        width: size,
+        margin: "auto",
+        marginTop: "3em",
+        // marginBottom: "3em",
+      }}
+      aria-live="polite"
+    >
       <img
         src={avatarUrl ? avatarUrl : `https://place-hold.it/${size}x${size}`}
         alt={avatarUrl ? "Avatar" : "No image"}

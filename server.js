@@ -22,44 +22,64 @@ const supabase = createClient(
 );
 
 // Access auth admin api
-const adminAuthClient = supabase.auth.admin;
-const checkPrivileges = async () => {
-  console.log("checked");
-  /* code for fetching the list of users for admins */
-  // const {
-  //   data: { users },
-  //   error,
-  // } = await supabase.auth.admin.listUsers();
-  // if (error) {
-  //   console.log(error);
-  // } else if (users) {
-  //   console.log(users);
-  // }
-
-  // const { DBdata, DBerror } = await supabase
-  //   .from("public.admin")
-  //   .select()
-  //   .eq("profile_id", id);
-
-  const { data, error } = await supabase.from("admin").select();
-  if (error) {
-    return false;
-  } else if (data) {
-    return true;
-  } else {
-    return false;
+const checkStatus = async () => {
+  const { data, error } = await supabase.from("admin").select().eq("id", 1);
+  if (data) {
+    console.log("admin accessed)", data);
+  } else if (error) {
+    console.log(error);
   }
 };
 
+app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "build")));
 
 app.get("/ping", function (req, res) {
   return res.send("bingo");
 });
 
-app.get("/privileges", async function (req, res) {
-  const adminStatus = await checkPrivileges();
-  console.log("hmm", adminStatus);
+app.delete("/delete", async function (req, res) {
+  console.log("body", req.body);
+  // check admin status
+  const { data, error } = await supabase
+    .from("admin")
+    .select()
+    .eq("profile_id", req.body.adminId);
+  if (error) {
+    console.log(error);
+  }
+  if (data) {
+    // delete objects for user
+    const { data, error } = await supabase.rpc("owner_null", {
+      owner_id: req.body.id,
+    });
+    if (data) {
+      const { data, error } = await supabase.auth.admin.deleteUser(req.body.id);
+      if (error) {
+        console.log("error deleting auth.user", error);
+        res.send(error);
+      }
+      if (data !== null) {
+        console.log("deleted: ", data);
+        res.send(data);
+      }
+    }
+    if (error) {
+      console.log("error performing object delete");
+    }
+    // if admin successfully accessed, delete the requested user from profiles
+    // const { deleteData, error } = await supabase
+    //   .from("profiles")
+    //   .delete()
+    //   .eq("id", req.body.id);
+    // if (error) {
+    //   console.log("could not delete user from profiles");
+    //   res.send("could not delete user");
+    // }
+    // if (data) {
+    // console.log("deleted data");
+    // then delete requested user from the auth users table
+  }
 });
 
 app.get("/*", (req, res) => {
