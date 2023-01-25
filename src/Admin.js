@@ -26,11 +26,11 @@ const Admin = ({ userData, userId, updateUserData }) => {
   }, []);
 
   const deleteFromServer = async (deleteId) => {
-    const { data, error } = await axios.delete("/delete", {
+    const { data, error, status } = await axios.delete("/delete", {
       data: { id: deleteId, adminId: userId },
     });
-    if (error) {
-      console.log(error);
+    if (data === "cannot remove admin") {
+      alert("You cannot delete a fellow admin I'm afraid.");
     } else {
       console.log(data);
       // questionable delete method

@@ -7,7 +7,7 @@ import HCaptcha from "@hcaptcha/react-hcaptcha";
 
 import { validatePwd, validateSubmitPwd } from "./helperfuncs.js";
 
-export const Modal = ({ setShowModal, handleSignup }) => {
+export const Modal = ({ setShowModal, handleSignup, removeLoginError }) => {
   const [usernameTaken, setUsernameTaken] = useState(false);
   const [checkPassword, setCheckPassword] = useState("");
   const [matchPassword, setMatchPassword] = useState(true);

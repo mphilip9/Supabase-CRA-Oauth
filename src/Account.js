@@ -47,7 +47,7 @@ const Account = ({ session }) => {
       setUserData(data);
       console.log("data here", userData);
     } else {
-      console.log("hmm", data);
+      console.log("hmm", userId + "1");
     }
   };
 
@@ -74,6 +74,7 @@ const Account = ({ session }) => {
 
   useEffect(() => {
     getProfile();
+    getProfiles();
     checkStatus();
   }, [session]);
 

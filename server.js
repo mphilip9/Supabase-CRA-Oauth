@@ -47,8 +47,8 @@ app.delete("/delete", async function (req, res) {
     .eq("profile_id", req.body.adminId);
   if (error) {
     console.log(error);
-  }
-  if (data) {
+    res.send("could not remove user");
+  } else if (data) {
     // delete objects for user
     const { data, error } = await supabase.rpc("owner_null", {
       owner_id: req.body.id,
@@ -57,11 +57,10 @@ app.delete("/delete", async function (req, res) {
       const { data, error } = await supabase.auth.admin.deleteUser(req.body.id);
       if (error) {
         console.log("error deleting auth.user", error);
-        res.send(error);
-      }
-      if (data !== null) {
+        res.send("error");
+      } else if (data !== null) {
         console.log("deleted: ", data);
-        res.send(data);
+        res.send("data rom remove user");
       }
     }
     if (error) {

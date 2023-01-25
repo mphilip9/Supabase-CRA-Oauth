@@ -91,6 +91,10 @@ export default function Auth({ checkPrivileges }) {
     }
   };
 
+  const removeLoginError = () => {
+    setLoginError(false);
+  };
+
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -170,7 +174,11 @@ export default function Auth({ checkPrivileges }) {
         </form>
         <button onClick={openModal}>Signup</button>
         {showModal ? (
-          <Modal setShowModal={setShowModal} handleSignup={handleSignup} />
+          <Modal
+            removeLoginError={removeLoginError}
+            setShowModal={setShowModal}
+            handleSignup={handleSignup}
+          />
         ) : null}
 
         <button
