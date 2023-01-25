@@ -57,7 +57,7 @@ app.delete("/delete", async function (req, res) {
       const { data, error } = await supabase.auth.admin.deleteUser(req.body.id);
       if (error) {
         console.log("error deleting auth.user", error);
-        res.send("error");
+        res.send("could not remove user");
       } else if (data !== null) {
         console.log("deleted: ", data);
         res.send("data rom remove user");
