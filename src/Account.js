@@ -56,10 +56,7 @@ const Account = ({ session }) => {
     try {
       const { user } = session;
 
-      const { data, error } = await supabase
-        .from("admin")
-        .select("id")
-        .eq("id", 1);
+      const { data, error } = await supabase.from("admin").select("id");
 
       if (error) {
         throw error;
