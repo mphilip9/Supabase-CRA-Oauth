@@ -149,7 +149,7 @@ export default function Auth() {
           Forgot Password?
         </button>
         {resetPassword ? (
-          <div>
+          <>
             <label>Enter Email to reset password</label>
             <input
               onChange={(e) => {
@@ -161,11 +161,14 @@ export default function Auth() {
             </button>
             <p
               id="password-reset-notification"
-              style={{ display: "none", color: "green" }}
+              style={{
+                display: "none",
+                color: "green",
+              }}
             >
               Check your email for a code (it might be in spam)
             </p>
-          </div>
+          </>
         ) : null}
 
         <button onClick={signInWithGoogle}>
@@ -176,28 +179,6 @@ export default function Auth() {
             style={{ float: "right", height: "1em" }}
           ></img>
         </button>
-
-        {/* <p className="description">
-          Sign in via magic link with your email below
-        </p>
-        {loading ? (
-          "Sending magic link..."
-        ) : (
-          <form onSubmit={handleLogin}>
-            <label htmlFor="email">Email</label>
-            <input
-              id="email"
-              className="inputField"
-              type="email"
-              placeholder="Your email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <button className="button block" aria-live="polite">
-              Send magic link
-            </button>
-          </form>
-        )} */}
       </div>
     </div>
   );

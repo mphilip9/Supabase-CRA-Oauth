@@ -65,11 +65,9 @@ export const SignupModal = ({
         password: formData.password,
       });
       if (error) {
-        console.log("error here", error);
         /***** Need to add notification to tell user if signup failed  *****/
         // if data session is null, signup was successful
       } else if (data.session === null) {
-        console.log("no error", data);
         // check if user is already signed up
         if (data.user.identities.length > 0) {
           handleSignup();
@@ -78,7 +76,6 @@ export const SignupModal = ({
           setUsernameTaken(true);
         }
       } else {
-        console.log("neither?");
         setShowModal(false);
       }
     }

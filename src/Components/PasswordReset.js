@@ -55,7 +55,6 @@ const PasswordReset = () => {
         password: formData.password,
       });
       if (data) {
-        console.log("success!");
         navigate("/");
       }
       if (error) {

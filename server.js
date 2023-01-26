@@ -24,14 +24,12 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, "build")));
 
 app.delete("/delete", async function (req, res) {
-  console.log("body", req.body);
   // check admin status
   const { data, error } = await supabase
     .from("admin")
     .select()
     .eq("profile_id", req.body.adminId);
   if (error) {
-    console.log(error);
     res.send("could not remove user");
   } else if (data) {
     // delete objects for user --otherwise you get a foreign key constraint and can't delete user
@@ -41,15 +39,12 @@ app.delete("/delete", async function (req, res) {
     if (data) {
       const { data, error } = await supabase.auth.admin.deleteUser(req.body.id);
       if (error) {
-        console.log("error deleting auth.user", error);
         res.send("could not remove user");
       } else if (data !== null) {
-        console.log("deleted: ", data);
         res.send("data rom remove user");
       }
     }
     if (error) {
-      console.log("error performing object delete");
     }
   }
 });

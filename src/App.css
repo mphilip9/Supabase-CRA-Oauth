@@ -36,6 +36,7 @@ body,
 
 .container {
   width: 90%;
+  max-width: 90%;
   margin-left: auto;
   margin-right: auto;
 }
@@ -45,6 +46,7 @@ body,
   /* 540px */
   .container {
     width: 80%;
+    max-width: 80%;
   }
 }
 
@@ -54,6 +56,7 @@ body,
   .container {
     width: 75%;
     max-width: 60rem;
+    max-width: 60em;
   }
 }
 
@@ -410,11 +413,13 @@ button:hover {
   height: 240px;
   background-color: red;
   top: -60px;
+  cursor: pointer;
   left: 45px;
   z-index: 4;
 }
 
 .lid {
+  cursor: pointer;
   position: absolute;
   left: -2px;
   border-top-left-radius: 5px;
