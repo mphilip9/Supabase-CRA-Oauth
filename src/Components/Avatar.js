@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { supabase } from "./supabaseClient";
+import { supabase } from "../supabaseClient";
 
 export default function Avatar({ url, size, onUpload }) {
   const [avatarUrl, setAvatarUrl] = useState(null);
@@ -59,7 +59,6 @@ export default function Avatar({ url, size, onUpload }) {
         width: size,
         margin: "auto",
         marginTop: "3em",
-        // marginBottom: "3em",
       }}
       aria-live="polite"
     >

@@ -1,14 +1,19 @@
 import { useState, useEffect } from "react";
-import { supabase } from "./supabaseClient";
+import { supabase } from "../supabaseClient";
 import Avatar from "./Avatar";
 import Admin from "./Admin";
+import CupAnimation from "./CupAnimation";
 
 const Account = ({ session }) => {
+  // The DB data should be put into a single object
   const [loading, setLoading] = useState(true);
   const [userId, setUserId] = useState("");
   const [username, setUsername] = useState(null);
   const [website, setWebsite] = useState(null);
   const [avatar_url, setAvatarUrl] = useState(null);
+  const [strawMaterial, setStrawMaterial] = useState(null);
+  const [strawType, setStrawType] = useState(null);
+  const [plasticStraw, setPlasticStraw] = useState(false);
   const [adminNavStyle, setAdminNavStyle] = useState(["solid 1px gray", ""]);
 
   const [userData, setUserData] = useState([
@@ -22,7 +27,6 @@ const Account = ({ session }) => {
     },
   ]);
   const updateUserData = (deleteId) => {
-    console.log("updated user data");
     setUserData(userData.filter((user) => user.id !== deleteId));
   };
   const [admin, setAdmin] = useState(false);
@@ -41,41 +45,16 @@ const Account = ({ session }) => {
 
   // Fetch all profiles
   const getProfiles = async () => {
-    let { data, error, status } = await supabase.from("profiles").select();
+    let { data } = await supabase.from("profiles").select();
     if (data) {
       setAdmin(true);
       setUserData(data);
-      console.log("data here", userData);
-    } else {
-      console.log("hmm", userId + "1");
-    }
-  };
-
-  // Check admin status
-  const checkStatus = async () => {
-    try {
-      const { user } = session;
-
-      const { data, error } = await supabase.from("admin").select("id");
-
-      if (error) {
-        throw error;
-      }
-
-      if (data.length > 0) {
-        console.log("admin", data);
-        getProfiles();
-      }
-    } catch (error) {
-      console.log("get profiles", error);
-    } finally {
     }
   };
 
   useEffect(() => {
     getProfile();
     getProfiles();
-    checkStatus();
   }, [session]);
 
   // Fetch data for profile page
@@ -86,22 +65,23 @@ const Account = ({ session }) => {
 
       let { data, error, status } = await supabase
         .from("profiles")
-        .select(`id, username, website, avatar_url`)
+        .select(`id, username, website, avatar_url, straw_type, straw_material`)
         .eq("id", user.id)
         .single();
 
       if (error && status !== 406) {
         throw error;
       }
-
       if (data) {
         setUserId(data.id);
         setUsername(data.username);
         setWebsite(data.website);
         setAvatarUrl(data.avatar_url);
+        setStrawMaterial(data.straw_material);
+        setStrawType(data.straw_type);
       }
     } catch (error) {
-      console.log("get profile", error);
+      /**** Add functionality here to show error fetching profile if needed *****/
     } finally {
       setLoading(false);
     }
@@ -109,6 +89,7 @@ const Account = ({ session }) => {
 
   const updateProfile = async (e) => {
     e.preventDefault();
+    console.log(strawMaterial, strawType);
 
     try {
       setLoading(true);
@@ -119,6 +100,8 @@ const Account = ({ session }) => {
         username,
         website,
         avatar_url,
+        straw_material: strawMaterial,
+        straw_type: strawType,
         updated_at: new Date(),
       };
 
@@ -128,16 +111,28 @@ const Account = ({ session }) => {
         throw error;
       }
     } catch (error) {
-      console.log("update profile", error);
+      /**** Add functionality here to show error updating profile if needed *****/
     } finally {
       setLoading(false);
     }
   };
 
+  useEffect(() => {
+    if (strawMaterial === "plastic") {
+      setPlasticStraw(true);
+    } else {
+      setPlasticStraw(false);
+    }
+  }, [strawMaterial]);
+
   return (
     <div className="account-page">
+      <div className="slogan-container">
+        <h1 className="header">Straw Aficionado</h1>
+        <div className="slogan">What's a drink without a straw?</div>
+      </div>
       {admin ? (
-        <div>
+        <div className="profile-page-margin">
           <button
             style={{ border: adminNavStyle[0] }}
             name="profile"
@@ -171,7 +166,7 @@ const Account = ({ session }) => {
               <label htmlFor="Email">Email</label>
               <div className="account-email">{session.user.email}</div>
               <div>
-                <label htmlFor="username">Name</label>
+                <label htmlFor="username">Display Name</label>
                 <input
                   id="username"
                   type="text"
@@ -180,12 +175,22 @@ const Account = ({ session }) => {
                 />
               </div>
               <div>
-                <label htmlFor="website">Website</label>
+                <label htmlFor="straw-material">Favorite Straw Material?</label>
                 <input
-                  id="website"
-                  type="url"
-                  value={website || ""}
-                  onChange={(e) => setWebsite(e.target.value)}
+                  id="straw-material"
+                  type="text"
+                  value={strawMaterial || ""}
+                  onChange={(e) => setStrawMaterial(e.target.value)}
+                />
+                {plasticStraw ? <div>Disappointing...</div> : null}
+              </div>
+              <div>
+                <label htmlFor="straw-type">Favorite Straw Type?</label>
+                <input
+                  id="straw-type"
+                  type="text"
+                  value={strawType || ""}
+                  onChange={(e) => setStrawType(e.target.value)}
                 />
               </div>
               <div>
@@ -210,6 +215,7 @@ const Account = ({ session }) => {
           userId={userId}
         />
       )}
+      <CupAnimation />
     </div>
   );
 };

@@ -1,19 +1,10 @@
 import { useState, useEffect } from "react";
 import { supabase } from "./supabaseClient";
-import axios from "axios";
-import Auth from "./Auth";
-import Account from "./Account";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import Auth from "./Components/Auth";
+import Account from "./Components/Account";
 
 export default function Home() {
   const [session, setSession] = useState(null);
-
-  const checkPrivileges = (id) => {
-    axios
-      .get("/privileges", { params: { id: id } })
-      .then((response) => console.log(response.data))
-      .catch((error) => console.log(error));
-  };
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
@@ -23,18 +14,11 @@ export default function Home() {
     supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
     });
-
-    // DBcheck();
-
-    axios
-      .get("/ping")
-      .then((response) => console.log(response.data))
-      .catch((error) => console.log(error));
   }, []);
   return (
     <div className="container" style={{ padding: "50px 0 100px 0" }}>
       {!session ? (
-        <Auth checkPrivileges={checkPrivileges} />
+        <Auth />
       ) : (
         <Account key={session.user.id} session={session} />
       )}

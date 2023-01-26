@@ -1,5 +1,4 @@
-import { React, useState, useEffect, useCallback, useMemo } from "react";
-import { supabase } from "./supabaseClient";
+import { React, useState, useCallback, useMemo } from "react";
 import axios from "axios";
 import DataTable from "react-data-table-component";
 
@@ -32,8 +31,7 @@ const Admin = ({ userData, userId, updateUserData }) => {
     if (data === "could not remove user") {
       alert("You cannot delete a fellow admin I'm afraid.");
     } else {
-      console.log(data);
-      // questionable delete method
+      // removes the selected user from state instead of requesting data from DB
       updateUserData(deleteId);
     }
   };
@@ -45,7 +43,6 @@ const Admin = ({ userData, userId, updateUserData }) => {
       ) {
         setToggleCleared(!toggleCleared);
         // perform delete action here
-        // deleteUser(selectedUser);
         deleteFromServer(selectedUser);
       }
     };

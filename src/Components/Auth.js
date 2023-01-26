@@ -1,54 +1,29 @@
-import { useState, useEffect } from "react";
-import { supabase } from "./supabaseClient";
+import { useState } from "react";
+import { supabase } from "../supabaseClient";
 import { useSpring, animated } from "@react-spring/web";
 
 import { Modal } from "./Modal";
+import CupAnimation from "./CupAnimation";
 
-export default function Auth({ checkPrivileges }) {
+export default function Auth() {
+  // to render loading animation
   const [loading, setLoading] = useState(false);
+  // login with email
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  // signup notification
   const [signupSuccess, setSignupSuccess] = useState(false);
+  // toggle login error notification
   const [loginError, setLoginError] = useState(false);
+  // trigger signup
+  const [showModal, setShowModal] = useState(false);
 
-  // Remove me and replace this functionality with a modal
+  // Reset Password functionality
   const [resetPassword, setResetPassword] = useState(false);
   const [sendEmail, setSendEmail] = useState("");
 
-  const [showModal, setShowModal] = useState(false);
-
-  // React spring animation
-  const [springs, api] = useSpring(() => ({
-    from: {
-      backgroundColor: "#f75f48",
-      clipPath: `inset(10% 0 0 0)`,
-    },
-    config: { duration: 1000 },
-  }));
-  const [springState, setSpringState] = useState([10, 25]);
-  const handleClickAnimation = () => {
-    api.start({
-      from: {
-        backgroundColor: "#f75f48",
-        clipPath: `inset(${springState[0]}% 0 0 0)`,
-      },
-      to: {
-        backgroundColor: "#f75f48",
-        clipPath: `inset(${springState[1]}% 0 0 0)`,
-      },
-    });
-
-    if (springState[0] > 70) {
-      const elem = document.getElementById("secret-message");
-      elem.style.display = "block";
-    } else {
-      setSpringState((prevValues) => [prevValues[0] + 15, prevValues[1] + 15]);
-    }
-  };
-
   // password reset functionality
   const changePassword = async (e) => {
-    console.log(process.env.REACT_APP_PASSWORD_REDIRECT);
     e.preventDefault();
     const { data, error } = await supabase.auth.resetPasswordForEmail(
       sendEmail,
@@ -58,12 +33,11 @@ export default function Auth({ checkPrivileges }) {
     );
     setSendEmail("");
     if (error) {
-      console.log("error");
+      /***** build out error functionality to notify user *****/
     }
     if (data) {
       const elem = document.getElementById("password-reset-notification");
       elem.style.display = "block";
-      console.log("success", data);
       setLoginError(false);
     }
   };
@@ -85,9 +59,9 @@ export default function Auth({ checkPrivileges }) {
       password: password,
     });
     if (error) {
-      console.log(error);
       setLoginError(true);
     } else if (data) {
+      setLoginError(false);
     }
   };
 
@@ -95,6 +69,7 @@ export default function Auth({ checkPrivileges }) {
     setLoginError(false);
   };
 
+  // Magic Link login
   const handleLogin = async (e) => {
     e.preventDefault();
 
@@ -114,35 +89,19 @@ export default function Auth({ checkPrivileges }) {
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: "google",
     });
-    if (data) {
-      console.log(data);
+    if (error) {
+      setLoginError(true);
     }
   }
 
   return (
     <div className="row flex-center flex">
       <div className="col-6 form-widget" aria-live="polite">
-        <h1 className="header">Straw Aficionado</h1>
-        <div className="cup-animation">
-          <div className="cup">
-            <div className="straw" onClick={handleClickAnimation}></div>
-            <div className="lid"></div>
-            <animated.div
-              onClick={handleClickAnimation}
-              style={{
-                marginLeft: "1px",
-                width: "95px",
-                height: "198px",
-                backgroundColor: "white",
-                zIndex: 3,
-                ...springs,
-              }}
-            ></animated.div>
-          </div>
-          <div id="secret-message" style={{ display: "none" }}>
-            Ahh.
-          </div>
+        <div className="slogan-container">
+          <h1 className="header">Straw Aficionado</h1>
+          <div className="slogan">What's a drink without a straw?</div>
         </div>
+        <CupAnimation />
         {signupSuccess ? (
           <div>Signup successful. Please confirm your email to login.</div>
         ) : null}
@@ -211,6 +170,7 @@ export default function Auth({ checkPrivileges }) {
         <button onClick={signInWithGoogle}>
           Click me to sign in with google
         </button>
+
         <p className="description">
           Sign in via magic link with your email below
         </p>

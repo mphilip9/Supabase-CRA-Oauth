@@ -6,7 +6,7 @@ body {
   --custom-panel-color: #222;
   --custom-box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.8);
   --custom-color: #fff;
-  --custom-color-brand: #24b47e;
+  --custom-color-brand: #f75f48;
   --custom-color-secondary: #666;
   --custom-border: 1px solid #333;
   --custom-border-radius: 5px;
@@ -386,6 +386,11 @@ button:hover {
 
 /* CSS for the animated cup */
 
+/* Questionable, need a better solution long term for positioning */
+.slogan {
+  margin-left: 1em;
+}
+
 .cup {
   position: relative;
   border-top-left-radius: 5px;
@@ -455,6 +460,11 @@ button:hover {
   .password-reset-container {
     width:50%;
   }
+}
+
+/* Profile Page */
+.profile-page-margin {
+  margin-top: 2em;
 }
 
 

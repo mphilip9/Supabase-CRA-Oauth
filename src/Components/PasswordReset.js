@@ -1,7 +1,7 @@
 import { React, useEffect, useRef, useState } from "react";
-import { validatePwd, validateSubmitPwd } from "./helperfuncs.js";
+import { validatePwd, validateSubmitPwd } from "../helperfuncs.js";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "./supabaseClient";
+import { supabase } from "../supabaseClient";
 
 const PasswordReset = () => {
   const navigate = useNavigate();
