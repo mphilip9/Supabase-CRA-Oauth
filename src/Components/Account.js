@@ -152,7 +152,9 @@ const Account = ({ session }) => {
       {togglePage === "profile" ? (
         <div aria-live="polite" className="profile-container">
           {loading ? (
-            "Saving ..."
+            <div className="center-animation">
+            <div className="lds-hourglass"></div>
+            </div>
           ) : (
             <form onSubmit={updateProfile} className="form-widget">
               <Avatar

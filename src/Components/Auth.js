@@ -5,9 +5,6 @@ import { SignupModal } from "./SignupModal";
 import CupAnimation from "./CupAnimation";
 
 export default function Auth() {
-  // to render loading animation
-  const [loading, setLoading] = useState(false);
-
   // login with email
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -61,6 +58,8 @@ export default function Auth() {
     });
     if (error) {
       setLoginError(true);
+      setEmail("");
+      setPassword("");
     } else if (data) {
       setLoginError(false);
     }
