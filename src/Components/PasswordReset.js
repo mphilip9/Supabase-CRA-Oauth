@@ -8,10 +8,10 @@ const PasswordReset = () => {
   const [checkPassword, setCheckPassword] = useState("");
   const [matchPassword, setMatchPassword] = useState(true);
   const [validatePassword, setValidatePassword] = useState({
-    length: ["red", "⚠"],
-    number: ["red", "⚠"],
-    special: ["red", "⚠"],
-    capital: ["red", "⚠"],
+    length: ["#FCC", "⚠"],
+    number: ["#FCC", "⚠"],
+    special: ["#FCC", "⚠"],
+    capital: ["#FCC", "⚠"],
   });
 
   const [formData, setFormData] = useState({
@@ -98,7 +98,7 @@ const PasswordReset = () => {
         </label>
         <br />
         {matchPassword ? null : (
-          <p style={{ color: "red", fontSize: ".9em" }}>
+          <p style={{ color: "#FCC", fontSize: ".9em" }}>
             Passwords do not match
           </p>
         )}

@@ -51,7 +51,7 @@ const Admin = ({ userData, userId, updateUserData }) => {
       <button
         key="delete"
         onClick={handleDelete}
-        style={{ backgroundColor: "red" }}
+        style={{ backgroundColor: "#F66", color: "black" }}
       >
         Delete
       </button>

@@ -6,15 +6,19 @@ import { supabase } from "../supabaseClient";
 
 import { validatePwd, validateSubmitPwd } from "../helperfuncs.js";
 
-export const Modal = ({ setShowModal, handleSignup, removeLoginError }) => {
+export const SignupModal = ({
+  setShowModal,
+  handleSignup,
+  removeLoginError,
+}) => {
   const [usernameTaken, setUsernameTaken] = useState(false);
   const [checkPassword, setCheckPassword] = useState("");
   const [matchPassword, setMatchPassword] = useState(true);
   const [validatePassword, setValidatePassword] = useState({
-    length: ["red", "⚠"],
-    number: ["red", "⚠"],
-    special: ["red", "⚠"],
-    capital: ["red", "⚠"],
+    length: ["#FCC", "⚠"],
+    number: ["#FCC", "⚠"],
+    special: ["#FCC", "⚠"],
+    capital: ["#FCC", "⚠"],
   });
 
   const [formData, setFormData] = useState({
@@ -61,9 +65,11 @@ export const Modal = ({ setShowModal, handleSignup, removeLoginError }) => {
         password: formData.password,
       });
       if (error) {
+        console.log("error here", error);
         /***** Need to add notification to tell user if signup failed  *****/
         // if data session is null, signup was successful
       } else if (data.session === null) {
+        console.log("no error", data);
         // check if user is already signed up
         if (data.user.identities.length > 0) {
           handleSignup();
@@ -72,6 +78,7 @@ export const Modal = ({ setShowModal, handleSignup, removeLoginError }) => {
           setUsernameTaken(true);
         }
       } else {
+        console.log("neither?");
         setShowModal(false);
       }
     }
@@ -129,7 +136,7 @@ export const Modal = ({ setShowModal, handleSignup, removeLoginError }) => {
             </label>
             <br />
             {matchPassword ? null : (
-              <p style={{ color: "red", fontSize: ".9em" }}>
+              <p style={{ color: "#FCC", fontSize: ".9em" }}>
                 Passwords do not match
               </p>
             )}

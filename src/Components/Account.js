@@ -46,7 +46,8 @@ const Account = ({ session }) => {
   // Fetch all profiles
   const getProfiles = async () => {
     let { data } = await supabase.from("profiles").select();
-    if (data) {
+    if (data.length > 1) {
+      console.log(data);
       setAdmin(true);
       setUserData(data);
     }

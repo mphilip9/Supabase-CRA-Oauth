@@ -1,16 +1,17 @@
 import { useState } from "react";
 import { supabase } from "../supabaseClient";
-import { useSpring, animated } from "@react-spring/web";
 
-import { Modal } from "./Modal";
+import { SignupModal } from "./SignupModal";
 import CupAnimation from "./CupAnimation";
 
 export default function Auth() {
   // to render loading animation
   const [loading, setLoading] = useState(false);
+
   // login with email
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   // signup notification
   const [signupSuccess, setSignupSuccess] = useState(false);
   // toggle login error notification
@@ -70,20 +71,20 @@ export default function Auth() {
   };
 
   // Magic Link login
-  const handleLogin = async (e) => {
-    e.preventDefault();
+  // const handleLogin = async (e) => {
+  //   e.preventDefault();
 
-    try {
-      setLoading(true);
-      const { error } = await supabase.auth.signInWithOtp({ email });
-      if (error) throw error;
-      alert("Check your email for the login link!");
-    } catch (error) {
-      alert(error.error_description || error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
+  //   try {
+  //     setLoading(true);
+  //     const { error } = await supabase.auth.signInWithOtp({ email });
+  //     if (error) throw error;
+  //     alert("Check your email for the login link!");
+  //   } catch (error) {
+  //     alert(error.error_description || error.message);
+  //   } finally {
+  //     setLoading(false);
+  //   }
+  // };
 
   async function signInWithGoogle() {
     const { data, error } = await supabase.auth.signInWithOAuth({
@@ -106,7 +107,7 @@ export default function Auth() {
           <div>Signup successful. Please confirm your email to login.</div>
         ) : null}
         {loginError ? (
-          <div style={{ color: "red" }}>
+          <div style={{ color: "#FCC" }}>
             There was a problem with your login.
           </div>
         ) : null}
@@ -133,7 +134,7 @@ export default function Auth() {
         </form>
         <button onClick={openModal}>Signup</button>
         {showModal ? (
-          <Modal
+          <SignupModal
             removeLoginError={removeLoginError}
             setShowModal={setShowModal}
             handleSignup={handleSignup}
@@ -168,10 +169,15 @@ export default function Auth() {
         ) : null}
 
         <button onClick={signInWithGoogle}>
-          Click me to sign in with google
+          Sign in with Google
+          <img
+            alt="google-logo"
+            src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg"
+            style={{ float: "right", height: "1em" }}
+          ></img>
         </button>
 
-        <p className="description">
+        {/* <p className="description">
           Sign in via magic link with your email below
         </p>
         {loading ? (
@@ -191,7 +197,7 @@ export default function Auth() {
               Send magic link
             </button>
           </form>
-        )}
+        )} */}
       </div>
     </div>
   );

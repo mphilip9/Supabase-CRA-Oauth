@@ -1,6 +1,6 @@
 export const validatePwd = (pwd) => {
-  let hazardColor = "red";
-  let checkedColor = "green";
+  let hazardColor = "#FCC";
+  let checkedColor = "#01FF01";
   // Have to use the actual symbols rather than character codes because React converts variables to protect against XSS attacks
   let hazardSign = "⚠";
   let checkMark = "✓";
