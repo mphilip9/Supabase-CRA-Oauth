@@ -13,7 +13,7 @@ export default function Auth() {
   const [signupSuccess, setSignupSuccess] = useState(false);
   // toggle login error notification
   const [loginError, setLoginError] = useState(false);
-  // trigger signup
+  // trigger signup modal
   const [showModal, setShowModal] = useState(false);
 
   // Reset Password functionality

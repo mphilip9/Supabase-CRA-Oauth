@@ -108,7 +108,7 @@ export const SignupModal = ({
               <figcaption>Password Requirements:</figcaption>
               <ul>
                 <li style={{ color: validatePassword.length[0] }}>
-                  {validatePassword.length[1]} length 8
+                  {validatePassword.length[1]} minimum length 8
                 </li>
                 <li style={{ color: validatePassword.number[0] }}>
                   {" "}
