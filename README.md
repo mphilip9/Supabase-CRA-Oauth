@@ -12,7 +12,7 @@ An application for those of us who appreciate a well made straw. It features aut
 This project is currently in development. Users can signup and login using email/Oauth through google. Users must be validated by confirming their email. They can also reset their password through email. Users can update data for their account like their favorite straw and add an avatar picture. There is also an admin tab that allows super users to perform certain actions on other users. 
 
 ## Screenshots
-
+![Screen Shot 2023-01-28 at 6 28 06 PM](https://user-images.githubusercontent.com/47395159/215296002-91f3136e-d137-4052-994f-360a2d9c866f.png)
 
 ## Installation and Setup Instructions
 
